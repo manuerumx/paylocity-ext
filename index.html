@@ -6,15 +6,12 @@
 </head>
 <body>
 <h3>Paylocity hours worked.</h3>
-<table>
+<table width="300px">
     <tr>
         <td colspan="2"><hr/></td>
     </tr>
     <tr>
-        <td>
-            <input type="text" id="default_hours" name="default_hours" value="">
-        </td>
-        <td>
+        <td colspan="2" align="center">
             <input type="button" id="refresh" value="Refresh">
         </td>
     </tr>
@@ -22,7 +19,11 @@
         <td colspan="2"><hr/></td>
     </tr>
     <tr>
-        <td>Hours worked:</td>
+        <td>Advanced hours:</td>
+        <td><em><label id="advanced_hrs_worked"></label></em></td>
+    </tr>
+    <tr>
+        <td>Total hours worked:</td>
         <td><em><label id="total_hrs_worked"></label></em></td>
     </tr>
     <tr>

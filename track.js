@@ -1,29 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     let checkPageButton = document.getElementById('refresh');
-
-    checkStorage();
-    updateTime();
-
     checkPageButton.addEventListener('click', function () {
         updateTime();
     });
+    updateTime();
 }, false);
 
-/**
- * Check in the storage if a maximum number of hours are already defined.
- * If not, set the value to 45.
- */
-function checkStorage() {
-    chrome.storage.sync.get(['max_hours'], function (result) {
-        let max_hours = 45;
-        if (result.max_hours === undefined) {
-            chrome.storage.sync.set({'max_hours': max_hours});
-        } else {
-            max_hours = result.max_hours;
-        }
-        document.getElementById('default_hours').value = max_hours;
-    });
-}
+
 
 /**
  * Update the html with the current hours worked.
@@ -52,10 +35,18 @@ function validateSite(url) {
  * @param accumulated
  */
 function calculateHours(accumulated) {
-    let max_hours = document.getElementById('default_hours').value;
-    chrome.storage.sync.set({'max_hours': max_hours});
+    let max_hours = 45;
     let today = new Date();
-    let pending = (max_hours - accumulated);
+    let advanced_hours = 0;
+    let pending;
+
+    if ((4 - today.getDay()) > 0) {
+        let total_hours_by_now = today.getDay() * 9;
+        pending = total_hours_by_now - accumulated;
+        advanced_hours = pending < 0 ? pending * -1 : 0;
+    } else {
+        pending = (max_hours - accumulated);
+    }
 
     let pending_minutes = parseInt((pending % 1) * 60);
     let pending_hours = parseInt(pending);
@@ -65,10 +56,20 @@ function calculateHours(accumulated) {
     let hours_accumulated = parseInt(accumulated);
     let minutes_accumulated = parseInt((accumulated % 1) * 60);
 
-    document.getElementById('default_hours').value = max_hours;
-    document.getElementById('total_hrs_worked').innerHTML = hours_accumulated.toString().padStart(2, '0') + ':' + minutes_accumulated.toString().padStart(2, '0');
-    document.getElementById('today_pending').innerHTML = pending_hours.toString().padStart(2, '0') + ':' + pending_minutes.toString().padStart(2, '0');
+    document.getElementById('advanced_hrs_worked').innerHTML = formatTimeToString(advanced_hours, minutes_accumulated);
+    document.getElementById('total_hrs_worked').innerHTML = formatTimeToString(hours_accumulated, minutes_accumulated);
+    document.getElementById('today_pending').innerHTML = formatTimeToString(pending_hours, pending_minutes);
     document.getElementById('must_leave_office').innerHTML = today.toLocaleString();
+}
+
+/**
+ * Convert hours and minutes to a string.
+ * @param hours
+ * @param minutes
+ * @returns {string}
+ */
+function formatTimeToString(hours, minutes) {
+    return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0')
 }
 
 /**
