@@ -40,7 +40,7 @@ function calculateHours(accumulated) {
     let advanced_hours = 0;
     let pending;
 
-    if ((4 - today.getDay()) > 0) {
+    if ((5 - today.getDay()) > 0) {
         let total_hours_by_now = today.getDay() * 9;
         pending = total_hours_by_now - accumulated;
         advanced_hours = pending < 0 ? pending * -1 : 0;
