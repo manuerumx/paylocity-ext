@@ -68,7 +68,7 @@ function calculateHours(accumulated) {
     document.getElementById('default_hours').value = max_hours;
     document.getElementById('total_hrs_worked').innerHTML = hours_accumulated.toString().padStart(2, '0') + ':' + minutes_accumulated.toString().padStart(2, '0');
     document.getElementById('today_pending').innerHTML = pending_hours.toString().padStart(2, '0') + ':' + pending_minutes.toString().padStart(2, '0');
-    document.getElementById('must_leave_office').innerHTML = today.toLocaleTimeString();
+    document.getElementById('must_leave_office').innerHTML = today.toLocaleString();
 }
 
 /**
